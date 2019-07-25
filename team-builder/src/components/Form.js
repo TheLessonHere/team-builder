@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
 
-function Form (props) {
+const Form = (props) => {
+  const { submitMember, initialMember } = props;
+  const [member, setMember] = useState(initialMember || {name: '', email: '', role: ''});
 
-  const [newmember, setNewMember] = useState({ name: "", email: "", role: "" })
+  const handleChange = (event) => {
+    setMember({...member, [event.target.name]: event.target.value})
+  }
 
-  function handleChange(event) {
-    const updatedMember = { ...newmember, [event.target.name]: event.target.value };
-    console.log(
-      "handleChange",
-      event.target.name,
-      event.target.value,
-      updatedMember
-    );
-    setNewMember(updatedMember);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    submitMember(member);
+    setMember({name: '', email: '', role: ''});
   }
 
     return (
     <div className="new-member-form">
-      <form onSubmit={() => {props.submitsetter(props.memberlist.concat([newmember]))}}>
+      <form onSubmit={handleSubmit}>
         <fieldset>
           <legend>New Team Members:</legend>
             <label>
@@ -27,7 +26,7 @@ function Form (props) {
               type="text" 
               name="name"
               placeholder="Enter member name"
-              value={newmember.name}
+              value={member.name}
               onChange={handleChange}/>
             </label>
             <label>
@@ -38,7 +37,7 @@ function Form (props) {
               name="email"
               aria-describedby="emailHelp"
               placeholder="Enter member email"
-              value={newmember.email}
+              value={member.email}
               onChange={handleChange}/>
             </label>
             <label>
@@ -49,7 +48,7 @@ function Form (props) {
               name="role"
               placeholder="Enter member role"
               onChange={handleChange}
-              value={newmember.role}/>
+              value={member.role}/>
             </label>
             <button type="submit">Submit New Member</button>
         </fieldset>
